@@ -1,11 +1,14 @@
 import { Layout } from "@/components/Layout";
+import ProtectedRoute from "@/components/ProtectedRoute";
 import Dashboard from "@/pages/Dashboard";
 
 const Index = () => {
   return (
-    <Layout>
-      <Dashboard />
-    </Layout>
+    <ProtectedRoute>
+      <Layout>
+        <Dashboard />
+      </Layout>
+    </ProtectedRoute>
   );
 };
 
