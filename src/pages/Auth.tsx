@@ -97,7 +97,8 @@ const Auth = () => {
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
-        backgroundBlendMode: 'soft-light'
+        backgroundBlendMode: 'soft-light',
+        filter: 'blur(80%)'
       }}
     >
       <Card className="w-full max-w-md">
