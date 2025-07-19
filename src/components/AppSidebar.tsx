@@ -47,7 +47,7 @@ export function AppSidebar() {
 
   return (
     <Sidebar 
-      className={`${state === "collapsed" ? "w-14" : "w-60 sm:w-60 w-48"} bg-gray-100 dark:bg-gray-800`}
+      className={`${state === "collapsed" ? "w-14" : "w-60 sm:w-60 w-48"} bg-sidebar border-sidebar-border`}
     >
       <SidebarContent className="flex flex-col h-full">
         <SidebarGroup>

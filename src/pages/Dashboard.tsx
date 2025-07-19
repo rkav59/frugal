@@ -40,19 +40,19 @@ export default function Dashboard() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-foreground">Budget Dashboard</h1>
-          <p className="text-muted-foreground">
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground">Budget Dashboard</h1>
+          <p className="text-muted-foreground text-sm sm:text-base">
             Overview of budget submissions and approvals for {format(new Date(), 'yyyy')}
           </p>
         </div>
-        <div className="flex gap-3">
-          <Button variant="outline" onClick={() => navigate('/reports')}>
+        <div className="flex flex-col sm:flex-row gap-3">
+          <Button variant="outline" onClick={() => navigate('/reports')} className="w-full sm:w-auto">
             <FileText className="mr-2 h-4 w-4" />
             Export Report
           </Button>
-          <Button onClick={() => navigate('/budget-input')}>
+          <Button onClick={() => navigate('/budget-input')} className="w-full sm:w-auto">
             <PlusCircle className="mr-2 h-4 w-4" />
             New Budget
           </Button>
@@ -92,18 +92,18 @@ export default function Dashboard() {
 
       {/* Quick Actions */}
       <Card className="border-primary/20 bg-gradient-to-r from-primary/5 to-accent/5">
-        <CardContent className="p-6">
-          <div className="flex items-center justify-between">
+        <CardContent className="p-4 sm:p-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
               <h3 className="text-lg font-semibold mb-2">Ready to create a new budget?</h3>
-              <p className="text-muted-foreground">
+              <p className="text-muted-foreground text-sm sm:text-base">
                 Submit your department budget request for approval and tracking
               </p>
             </div>
             <Button 
               size="lg" 
               onClick={() => navigate('/budget-input')}
-              className="shrink-0"
+              className="shrink-0 w-full sm:w-auto"
             >
               <PlusCircle className="mr-2 h-5 w-5" />
               Create Budget Request
