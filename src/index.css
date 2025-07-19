@@ -65,14 +65,14 @@ All colors MUST be HSL.
     /* Radius */
     --radius: 0.5rem;
 
-    /* Sidebar colors - Consistent with app theme */
-    --sidebar-background: var(--card) / 0.1;
-    --sidebar-foreground: var(--foreground);
-    --sidebar-primary: var(--primary);
-    --sidebar-primary-foreground: var(--primary-foreground);
-    --sidebar-accent: var(--accent) / 0.1;
-    --sidebar-accent-foreground: var(--foreground);
-    --sidebar-border: var(--border) / 0.1;
+    /* Sidebar colors - Blue sidebar with theme-aware text */
+    --sidebar-background: 217 91% 60%;
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-primary: 217 91% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 217 91% 70%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 217 91% 50%;
     --sidebar-ring: var(--ring);
   }
 
@@ -110,7 +110,15 @@ All colors MUST be HSL.
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
-    /* Sidebar colors inherit from main theme - no need to redefine in dark mode */
+    
+    /* Sidebar colors for dark mode - match app theme with black text */
+    --sidebar-background: 222.2 84% 4.9%;
+    --sidebar-foreground: 0 0% 0%;
+    --sidebar-primary: 222.2 84% 4.9%;
+    --sidebar-primary-foreground: 0 0% 0%;
+    --sidebar-accent: 217.2 32.6% 17.5%;
+    --sidebar-accent-foreground: 0 0% 0%;
+    --sidebar-border: 217.2 32.6% 17.5%;
   }
 }
 

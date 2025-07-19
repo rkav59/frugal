@@ -40,22 +40,33 @@ export default function Dashboard() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 px-2 sm:px-0">
-        <div className="min-w-0 flex-1">
-          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground break-words">Budget Dashboard</h1>
-          <p className="text-muted-foreground text-xs sm:text-sm md:text-base mt-1">
-            Overview of budget submissions and approvals for {format(new Date(), 'yyyy')}
-          </p>
-        </div>
-        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto shrink-0">
-          <Button variant="outline" onClick={() => navigate('/reports')} className="w-full sm:w-auto text-sm">
-            <FileText className="mr-2 h-4 w-4" />
-            Export Report
-          </Button>
-          <Button onClick={() => navigate('/budget-input')} className="w-full sm:w-auto text-sm">
-            <PlusCircle className="mr-2 h-4 w-4" />
-            New Budget
-          </Button>
+      <div className="flex flex-col gap-4 px-1 sm:px-2 lg:px-0">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3 sm:gap-4">
+          <div className="min-w-0 flex-1">
+            <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-foreground break-words leading-tight">
+              Budget Dashboard
+            </h1>
+            <p className="text-muted-foreground text-xs sm:text-sm lg:text-base mt-1 leading-relaxed">
+              Overview of budget submissions and approvals for {format(new Date(), 'yyyy')}
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto shrink-0">
+            <Button 
+              variant="outline" 
+              onClick={() => navigate('/reports')} 
+              className="w-full sm:w-auto text-xs sm:text-sm h-8 sm:h-9 px-3 sm:px-4"
+            >
+              <FileText className="mr-1 sm:mr-2 h-3 sm:h-4 w-3 sm:w-4" />
+              <span className="truncate">Export Report</span>
+            </Button>
+            <Button 
+              onClick={() => navigate('/budget-input')} 
+              className="w-full sm:w-auto text-xs sm:text-sm h-8 sm:h-9 px-3 sm:px-4"
+            >
+              <PlusCircle className="mr-1 sm:mr-2 h-3 sm:h-4 w-3 sm:w-4" />
+              <span className="truncate">New Budget</span>
+            </Button>
+          </div>
         </div>
       </div>
 
