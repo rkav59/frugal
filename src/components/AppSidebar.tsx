@@ -22,7 +22,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
-import sidebarBackground from "@/assets/sidebar-background.png";
+
 
 const mainItems = [
   { title: "Dashboard", url: "/", icon: LayoutDashboard },
@@ -47,18 +47,11 @@ export function AppSidebar() {
 
   return (
     <Sidebar 
-      className={state === "collapsed" ? "w-14" : "w-60 sm:w-60 w-48"}
-      style={{
-        backgroundImage: `url(${sidebarBackground})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-        backgroundBlendMode: 'soft-light'
-      }}
+      className={`${state === "collapsed" ? "w-14" : "w-60 sm:w-60 w-48"} bg-gray-100 dark:bg-gray-800`}
     >
       <SidebarContent className="flex flex-col h-full">
         <SidebarGroup>
-          <SidebarGroupLabel className="text-base">Frugal</SidebarGroupLabel>
+          
           <SidebarGroupContent>
             <SidebarMenu className="space-y-3">
               {mainItems.map((item, index) => (
