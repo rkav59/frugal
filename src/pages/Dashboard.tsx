@@ -40,19 +40,19 @@ export default function Dashboard() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-foreground">Budget Dashboard</h1>
-          <p className="text-muted-foreground text-sm sm:text-base">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 px-2 sm:px-0">
+        <div className="min-w-0 flex-1">
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground break-words">Budget Dashboard</h1>
+          <p className="text-muted-foreground text-xs sm:text-sm md:text-base mt-1">
             Overview of budget submissions and approvals for {format(new Date(), 'yyyy')}
           </p>
         </div>
-        <div className="flex flex-col sm:flex-row gap-3">
-          <Button variant="outline" onClick={() => navigate('/reports')} className="w-full sm:w-auto">
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto shrink-0">
+          <Button variant="outline" onClick={() => navigate('/reports')} className="w-full sm:w-auto text-sm">
             <FileText className="mr-2 h-4 w-4" />
             Export Report
           </Button>
-          <Button onClick={() => navigate('/budget-input')} className="w-full sm:w-auto">
+          <Button onClick={() => navigate('/budget-input')} className="w-full sm:w-auto text-sm">
             <PlusCircle className="mr-2 h-4 w-4" />
             New Budget
           </Button>
