@@ -12,6 +12,7 @@ const Auth = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [loginData, setLoginData] = useState({ email: '', password: '' });
   const [signupData, setSignupData] = useState({ email: '', password: '', fullName: '' });
+  const [passwordErrors, setPasswordErrors] = useState<string[]>([]);
   const { signIn, signUp, user } = useAuth();
   const navigate = useNavigate();
 
@@ -20,6 +21,35 @@ const Auth = () => {
       navigate('/');
     }
   }, [user, navigate]);
+
+  const validatePassword = (password: string): string[] => {
+    const errors: string[] = [];
+    
+    if (password.length < 8) {
+      errors.push("At least 8 characters");
+    }
+    if (!/[A-Z]/.test(password)) {
+      errors.push("One uppercase letter");
+    }
+    if (!/[a-z]/.test(password)) {
+      errors.push("One lowercase letter");
+    }
+    if (!/[0-9]/.test(password)) {
+      errors.push("One number");
+    }
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+      errors.push("One special character");
+    }
+    
+    return errors;
+  };
+
+  const handlePasswordChange = (password: string) => {
+    setSignupData({ ...signupData, password });
+    setPasswordErrors(validatePassword(password));
+  };
+
+  const isPasswordValid = passwordErrors.length === 0 && signupData.password.length > 0;
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -165,11 +195,24 @@ const Auth = () => {
                     type="password"
                     placeholder="Choose a password"
                     value={signupData.password}
-                    onChange={(e) => setSignupData({ ...signupData, password: e.target.value })}
+                    onChange={(e) => handlePasswordChange(e.target.value)}
                     required
                   />
+                  {signupData.password && passwordErrors.length > 0 && (
+                    <div className="text-sm text-destructive space-y-1">
+                      <p className="font-medium">Password must contain:</p>
+                      <ul className="list-disc list-inside space-y-0.5">
+                        {passwordErrors.map((error, index) => (
+                          <li key={index}>{error}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  {signupData.password && isPasswordValid && (
+                    <p className="text-sm text-success">✓ Password meets all requirements</p>
+                  )}
                 </div>
-                <Button type="submit" className="w-full" disabled={isLoading}>
+                <Button type="submit" className="w-full" disabled={isLoading || !isPasswordValid}>
                   {isLoading ? 'Creating account...' : 'Create Account'}
                 </Button>
               </form>
