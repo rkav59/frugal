@@ -81,7 +81,7 @@ export default function UserManagement() {
           .from('profiles')
           .update({
             full_name: userForm.full_name,
-            role: userForm.role,
+            role: userForm.role as any,
             department: userForm.department,
             cost_center: userForm.cost_center,
           })

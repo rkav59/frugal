@@ -2,60 +2,14 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/hooks/use-toast';
+import type { Tables, TablesInsert, TablesUpdate } from '@/integrations/supabase/types';
 
-export interface Budget {
-  id: string;
-  budget_id: string;
-  department: string;
-  cost_center: string;
-  budget_type: 'OPEX' | 'CAPEX';
-  amount: number;
-  currency: string;
-  description?: string;
-  justification?: string;
-  period_start: string;
-  period_end: string;
-  status: 'Draft' | 'Submitted' | 'Under Review' | 'Approved' | 'Rejected' | 'Revision Required';
-  submitted_by?: string;
-  submitted_at?: string;
-  reviewed_by?: string;
-  reviewed_at?: string;
-  review_comments?: string;
-  created_at: string;
-  updated_at: string;
-}
-
-export interface BudgetLineItem {
-  id: string;
-  budget_id: string;
-  category: string;
-  subcategory?: string;
-  description: string;
-  quantity: number;
-  unit_cost: number;
-  total_amount: number;
-  notes?: string;
-}
-
-export interface Department {
-  id: string;
-  name: string;
-  code: string;
-  description?: string;
-  head_of_department?: string;
-  budget_limit?: number;
-  is_active: boolean;
-}
-
-export interface CostCenter {
-  id: string;
-  code: string;
-  name: string;
-  department_id: string;
-  description?: string;
-  budget_limit?: number;
-  is_active: boolean;
-}
+export type Budget = Tables<'budgets'>;
+export type BudgetInsert = TablesInsert<'budgets'>;
+export type BudgetUpdate = TablesUpdate<'budgets'>;
+export type BudgetLineItem = Tables<'budget_line_items'>;
+export type Department = Tables<'departments'>;
+export type CostCenter = Tables<'cost_centers'>;
 
 export function useBudgets() {
   const [budgets, setBudgets] = useState<Budget[]>([]);
@@ -97,7 +51,7 @@ export function useBudgets() {
     }
   };
 
-  const createBudget = async (budgetData: Partial<Budget>) => {
+  const createBudget = async (budgetData: BudgetInsert) => {
     try {
       const { data, error } = await supabase.from('budgets').insert({
         ...budgetData,
@@ -124,7 +78,7 @@ export function useBudgets() {
     }
   };
 
-  const updateBudget = async (id: string, updates: Partial<Budget>) => {
+  const updateBudget = async (id: string, updates: BudgetUpdate) => {
     try {
       const { data, error } = await supabase
         .from('budgets')

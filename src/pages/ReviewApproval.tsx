@@ -39,7 +39,7 @@ export default function ReviewApproval() {
       'Under Review': 'default',
       'Approved': 'success',
       'Rejected': 'destructive',
-      'Revision Required': 'warning'
+      'Revision Required': 'outline'
     } as const;
 
     return (

@@ -9,7 +9,7 @@ import { CalendarIcon, Download, TrendingUp, DollarSign, BarChart3, PieChart } f
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { useBudgets } from "@/hooks/useBudgets";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart as RechartsPieChart, Cell } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart as RechartsPieChart, Pie, Cell } from "recharts";
 
 export default function Reports() {
   const { budgets, departments, loading } = useBudgets();

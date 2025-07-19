@@ -95,7 +95,10 @@ export default function BudgetInput() {
       if (currentBudgetId) {
         await updateBudget(currentBudgetId, budgetData);
       } else {
-        const newBudget = await createBudget(budgetData);
+        const newBudget = await createBudget({
+          ...budgetData,
+          budget_id: '', // Will be set by createBudget function
+        });
         setCurrentBudgetId(newBudget.id);
       }
     } catch (error) {
