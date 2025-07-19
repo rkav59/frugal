@@ -14,6 +14,318 @@ export type Database = {
   }
   public: {
     Tables: {
+      approval_workflows: {
+        Row: {
+          approved_at: string | null
+          approver_id: string
+          budget_id: string
+          comments: string | null
+          created_at: string
+          id: string
+          level: number
+          status: string
+        }
+        Insert: {
+          approved_at?: string | null
+          approver_id: string
+          budget_id: string
+          comments?: string | null
+          created_at?: string
+          id?: string
+          level: number
+          status?: string
+        }
+        Update: {
+          approved_at?: string | null
+          approver_id?: string
+          budget_id?: string
+          comments?: string | null
+          created_at?: string
+          id?: string
+          level?: number
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "approval_workflows_approver_id_fkey"
+            columns: ["approver_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "approval_workflows_budget_id_fkey"
+            columns: ["budget_id"]
+            isOneToOne: false
+            referencedRelation: "budgets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      budget_history: {
+        Row: {
+          action: string
+          budget_id: string
+          changed_by: string
+          id: string
+          new_values: Json | null
+          old_values: Json | null
+          timestamp: string
+        }
+        Insert: {
+          action: string
+          budget_id: string
+          changed_by: string
+          id?: string
+          new_values?: Json | null
+          old_values?: Json | null
+          timestamp?: string
+        }
+        Update: {
+          action?: string
+          budget_id?: string
+          changed_by?: string
+          id?: string
+          new_values?: Json | null
+          old_values?: Json | null
+          timestamp?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "budget_history_budget_id_fkey"
+            columns: ["budget_id"]
+            isOneToOne: false
+            referencedRelation: "budgets"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "budget_history_changed_by_fkey"
+            columns: ["changed_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
+      budget_line_items: {
+        Row: {
+          budget_id: string
+          category: string
+          created_at: string
+          description: string
+          id: string
+          notes: string | null
+          quantity: number | null
+          subcategory: string | null
+          total_amount: number
+          unit_cost: number
+          updated_at: string
+        }
+        Insert: {
+          budget_id: string
+          category: string
+          created_at?: string
+          description: string
+          id?: string
+          notes?: string | null
+          quantity?: number | null
+          subcategory?: string | null
+          total_amount: number
+          unit_cost: number
+          updated_at?: string
+        }
+        Update: {
+          budget_id?: string
+          category?: string
+          created_at?: string
+          description?: string
+          id?: string
+          notes?: string | null
+          quantity?: number | null
+          subcategory?: string | null
+          total_amount?: number
+          unit_cost?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "budget_line_items_budget_id_fkey"
+            columns: ["budget_id"]
+            isOneToOne: false
+            referencedRelation: "budgets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      budgets: {
+        Row: {
+          amount: number
+          budget_id: string
+          budget_type: string
+          cost_center: string
+          created_at: string
+          currency: string
+          department: string
+          description: string | null
+          id: string
+          justification: string | null
+          period_end: string
+          period_start: string
+          review_comments: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          submitted_at: string | null
+          submitted_by: string | null
+          updated_at: string
+        }
+        Insert: {
+          amount: number
+          budget_id: string
+          budget_type: string
+          cost_center: string
+          created_at?: string
+          currency?: string
+          department: string
+          description?: string | null
+          id?: string
+          justification?: string | null
+          period_end: string
+          period_start: string
+          review_comments?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          submitted_at?: string | null
+          submitted_by?: string | null
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          budget_id?: string
+          budget_type?: string
+          cost_center?: string
+          created_at?: string
+          currency?: string
+          department?: string
+          description?: string | null
+          id?: string
+          justification?: string | null
+          period_end?: string
+          period_start?: string
+          review_comments?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          submitted_at?: string | null
+          submitted_by?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "budgets_reviewed_by_fkey"
+            columns: ["reviewed_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "budgets_submitted_by_fkey"
+            columns: ["submitted_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
+      cost_centers: {
+        Row: {
+          budget_limit: number | null
+          code: string
+          created_at: string
+          department_id: string
+          description: string | null
+          id: string
+          is_active: boolean
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          budget_limit?: number | null
+          code: string
+          created_at?: string
+          department_id: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          budget_limit?: number | null
+          code?: string
+          created_at?: string
+          department_id?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          name?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cost_centers_department_id_fkey"
+            columns: ["department_id"]
+            isOneToOne: false
+            referencedRelation: "departments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      departments: {
+        Row: {
+          budget_limit: number | null
+          code: string
+          created_at: string
+          description: string | null
+          head_of_department: string | null
+          id: string
+          is_active: boolean
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          budget_limit?: number | null
+          code: string
+          created_at?: string
+          description?: string | null
+          head_of_department?: string | null
+          id?: string
+          is_active?: boolean
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          budget_limit?: number | null
+          code?: string
+          created_at?: string
+          description?: string | null
+          head_of_department?: string | null
+          id?: string
+          is_active?: boolean
+          name?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "departments_head_of_department_fkey"
+            columns: ["head_of_department"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           cost_center: string | null
@@ -55,7 +367,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_user_department: {
+        Args: { user_uuid: string }
+        Returns: string
+      }
+      get_user_role: {
+        Args: { user_uuid: string }
+        Returns: string
+      }
     }
     Enums: {
       user_role: "admin" | "department_user" | "finance_team" | "view_only"

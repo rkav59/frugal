@@ -7,6 +7,12 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
+import BudgetInput from "./pages/BudgetInput";
+import ReviewApproval from "./pages/ReviewApproval";
+import Reports from "./pages/Reports";
+import DepartmentManagement from "./pages/DepartmentManagement";
+import UserManagement from "./pages/UserManagement";
+import Settings from "./pages/Settings";
 
 const queryClient = new QueryClient();
 
@@ -20,6 +26,12 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<Auth />} />
+            <Route path="/budget-input" element={<BudgetInput />} />
+            <Route path="/review-approval" element={<ReviewApproval />} />
+            <Route path="/reports" element={<Reports />} />
+            <Route path="/departments" element={<DepartmentManagement />} />
+            <Route path="/users" element={<UserManagement />} />
+            <Route path="/settings" element={<Settings />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

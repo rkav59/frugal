@@ -12,8 +12,29 @@ import {
   Users,
   AlertTriangle
 } from "lucide-react";
+import { useBudgets } from "@/hooks/useBudgets";
+import { format } from "date-fns";
 
 export default function Dashboard() {
+  const { budgets, departments, loading } = useBudgets();
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-muted-foreground">Loading dashboard...</div>
+      </div>
+    );
+  }
+
+  // Calculate real-time statistics
+  const stats = {
+    totalBudget: budgets.reduce((sum, b) => sum + b.amount, 0),
+    pendingApproval: budgets.filter(b => ['Submitted', 'Under Review'].includes(b.status)).length,
+    approvedBudgets: budgets.filter(b => b.status === 'Approved').length,
+    activeDepartments: departments.filter(d => d.is_active).length,
+    approvalRate: budgets.length > 0 ? (budgets.filter(b => b.status === 'Approved').length / budgets.length) * 100 : 0,
+  };
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -21,7 +42,7 @@ export default function Dashboard() {
         <div>
           <h1 className="text-3xl font-bold text-foreground">Budget Dashboard</h1>
           <p className="text-muted-foreground">
-            Overview of budget submissions and approvals for Q1 2024
+            Overview of budget submissions and approvals for {format(new Date(), 'yyyy')}
           </p>
         </div>
         <div className="flex gap-3">
@@ -40,28 +61,28 @@ export default function Dashboard() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <DashboardCard
           title="Total Budget"
-          value="$2.4M"
+          value={`$${(stats.totalBudget / 1000000).toFixed(1)}M`}
           subtitle="Across all departments"
           icon={<DollarSign className="h-4 w-4" />}
           trend={{ value: 12.5, label: "from last quarter", isPositive: true }}
         />
         <DashboardCard
           title="Pending Approval"
-          value="8"
+          value={stats.pendingApproval.toString()}
           subtitle="Awaiting review"
           icon={<Clock className="h-4 w-4" />}
           trend={{ value: -5.2, label: "from last week", isPositive: false }}
         />
         <DashboardCard
           title="Approved Budgets"
-          value="24"
+          value={stats.approvedBudgets.toString()}
           subtitle="This quarter"
           icon={<CheckCircle className="h-4 w-4" />}
-          trend={{ value: 18.3, label: "approval rate", isPositive: true }}
+          trend={{ value: stats.approvalRate, label: "approval rate", isPositive: true }}
         />
         <DashboardCard
           title="Active Departments"
-          value="12"
+          value={stats.activeDepartments.toString()}
           subtitle="With submissions"
           icon={<Users className="h-4 w-4" />}
         />
@@ -106,29 +127,27 @@ export default function Dashboard() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              <div className="flex items-start gap-3">
-                <div className="w-2 h-2 bg-success rounded-full mt-2"></div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium">Budget BUD-001 approved</p>
-                  <p className="text-xs text-muted-foreground">IT Department • 2 hours ago</p>
-                </div>
-              </div>
-              
-              <div className="flex items-start gap-3">
-                <div className="w-2 h-2 bg-primary rounded-full mt-2"></div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium">New submission from Marketing</p>
-                  <p className="text-xs text-muted-foreground">BUD-002 • 4 hours ago</p>
-                </div>
-              </div>
-              
-              <div className="flex items-start gap-3">
-                <div className="w-2 h-2 bg-warning rounded-full mt-2"></div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium">Budget requires revision</p>
-                  <p className="text-xs text-muted-foreground">HR Department • 1 day ago</p>
-                </div>
-              </div>
+              {budgets.slice(0, 3).map((budget, index) => {
+                const colors = ['bg-success', 'bg-primary', 'bg-warning'];
+                const statuses = {
+                  'Approved': 'approved',
+                  'Submitted': 'submitted',
+                  'Rejected': 'requires revision'
+                };
+                return (
+                  <div key={budget.id} className="flex items-start gap-3">
+                    <div className={`w-2 h-2 ${colors[index]} rounded-full mt-2`}></div>
+                    <div className="flex-1">
+                      <p className="text-sm font-medium">
+                        Budget {budget.budget_id} {statuses[budget.status as keyof typeof statuses] || budget.status.toLowerCase()}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {budget.department} Department • {format(new Date(budget.created_at), "MMM dd")}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </CardContent>
         </Card>
