@@ -65,15 +65,15 @@ All colors MUST be HSL.
     /* Radius */
     --radius: 0.5rem;
 
-    /* Sidebar colors - Mustard with transparency */
-    --sidebar-background: 45 70% 25% / 0.1;
-    --sidebar-foreground: 0 0% 0%;
-    --sidebar-primary: 45 80% 60%;
-    --sidebar-primary-foreground: 45 10% 15%;
-    --sidebar-accent: 45 60% 35% / 0.1;
-    --sidebar-accent-foreground: 0 0% 0%;
-    --sidebar-border: 45 50% 30% / 0.1;
-    --sidebar-ring: 45 80% 60%;
+    /* Sidebar colors - Consistent with app theme */
+    --sidebar-background: var(--card) / 0.1;
+    --sidebar-foreground: var(--foreground);
+    --sidebar-primary: var(--primary);
+    --sidebar-primary-foreground: var(--primary-foreground);
+    --sidebar-accent: var(--accent) / 0.1;
+    --sidebar-accent-foreground: var(--foreground);
+    --sidebar-border: var(--border) / 0.1;
+    --sidebar-ring: var(--ring);
   }
 
   .dark {
@@ -110,15 +110,7 @@ All colors MUST be HSL.
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
-    /* Sidebar colors - Mustard (Dark Mode) with transparency */
-    --sidebar-background: 45 50% 20% / 0.1;
-    --sidebar-foreground: 0 0% 0%;
-    --sidebar-primary: 45 80% 60%;
-    --sidebar-primary-foreground: 45 10% 15%;
-    --sidebar-accent: 45 40% 30% / 0.1;
-    --sidebar-accent-foreground: 0 0% 0%;
-    --sidebar-border: 45 30% 25% / 0.1;
-    --sidebar-ring: 45 80% 60%;
+    /* Sidebar colors inherit from main theme - no need to redefine in dark mode */
   }
 }
 
