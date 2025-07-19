@@ -7,13 +7,15 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { CalendarIcon, Plus, Trash2, Save, Send } from "lucide-react";
+import { CalendarIcon, Plus, Trash2, Save, Send, ArrowLeft } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { useBudgets, BudgetLineItem } from "@/hooks/useBudgets";
 import { toast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
 
 export default function BudgetInput() {
+  const navigate = useNavigate();
   const { departments, costCenters, createBudget, updateBudget, submitBudget } = useBudgets();
   const [formData, setFormData] = useState({
     department: "",
@@ -140,13 +142,19 @@ export default function BudgetInput() {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold text-foreground">Budget Input</h1>
-          <p className="text-muted-foreground">
-            Create and submit budget requests for approval
-          </p>
+    <div className="container mx-auto px-4 py-6 space-y-6">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <Button variant="ghost" size="sm" onClick={() => navigate(-1)}>
+            <ArrowLeft className="h-4 w-4" />
+            Back
+          </Button>
+          <div>
+            <h1 className="text-3xl font-bold text-foreground">Budget Input</h1>
+            <p className="text-muted-foreground">
+              Create and submit budget requests for approval
+            </p>
+          </div>
         </div>
       </div>
 

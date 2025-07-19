@@ -5,13 +5,15 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { DateRange } from "react-day-picker";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { CalendarIcon, Download, TrendingUp, DollarSign, BarChart3, PieChart } from "lucide-react";
+import { CalendarIcon, Download, TrendingUp, DollarSign, BarChart3, PieChart, ArrowLeft } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { useBudgets } from "@/hooks/useBudgets";
+import { useNavigate } from "react-router-dom";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart as RechartsPieChart, Pie, Cell } from "recharts";
 
 export default function Reports() {
+  const navigate = useNavigate();
   const { budgets, departments, loading } = useBudgets();
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
   const [selectedDepartment, setSelectedDepartment] = useState<string>("all");
@@ -128,13 +130,19 @@ export default function Reports() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold text-foreground">Reports & Analytics</h1>
-          <p className="text-muted-foreground">
-            Comprehensive budget analytics and reporting
-          </p>
+    <div className="container mx-auto px-4 py-6 space-y-6">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <Button variant="ghost" size="sm" onClick={() => navigate(-1)}>
+            <ArrowLeft className="h-4 w-4" />
+            Back
+          </Button>
+          <div>
+            <h1 className="text-3xl font-bold text-foreground">Reports & Analytics</h1>
+            <p className="text-muted-foreground">
+              Comprehensive budget analytics and reporting
+            </p>
+          </div>
         </div>
         <Button onClick={exportReport}>
           <Download className="h-4 w-4 mr-2" />

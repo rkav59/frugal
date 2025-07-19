@@ -7,10 +7,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Edit, Trash2, Users, Shield, Mail } from "lucide-react";
+import { Plus, Edit, Trash2, Users, Shield, Mail, ArrowLeft } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import { useBudgets } from "@/hooks/useBudgets";
+import { useNavigate } from "react-router-dom";
 
 interface Profile {
   user_id: string;
@@ -24,6 +25,7 @@ interface Profile {
 }
 
 export default function UserManagement() {
+  const navigate = useNavigate();
   const { departments } = useBudgets();
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [isEditing, setIsEditing] = useState(false);
@@ -280,13 +282,19 @@ export default function UserManagement() {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold text-foreground">User Management</h1>
-          <p className="text-muted-foreground">
-            Manage user accounts and permissions
-          </p>
+    <div className="container mx-auto px-4 py-6 space-y-6">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <Button variant="ghost" size="sm" onClick={() => navigate(-1)}>
+            <ArrowLeft className="h-4 w-4" />
+            Back
+          </Button>
+          <div>
+            <h1 className="text-3xl font-bold text-foreground">User Management</h1>
+            <p className="text-muted-foreground">
+              Manage user accounts and permissions
+            </p>
+          </div>
         </div>
       </div>
 

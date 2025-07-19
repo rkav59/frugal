@@ -6,11 +6,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CheckCircle, XCircle, Clock, Eye, MessageSquare, Calendar, DollarSign } from "lucide-react";
+import { CheckCircle, XCircle, Clock, Eye, MessageSquare, Calendar, DollarSign, ArrowLeft } from "lucide-react";
 import { useBudgets } from "@/hooks/useBudgets";
 import { format } from "date-fns";
+import { useNavigate } from "react-router-dom";
 
 export default function ReviewApproval() {
+  const navigate = useNavigate();
   const { budgets, approveBudget, rejectBudget, loading } = useBudgets();
   const [selectedBudget, setSelectedBudget] = useState(null);
   const [reviewComments, setReviewComments] = useState("");
@@ -274,13 +276,19 @@ export default function ReviewApproval() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold text-foreground">Review & Approval</h1>
-          <p className="text-muted-foreground">
-            Review and approve budget submissions
-          </p>
+    <div className="container mx-auto px-4 py-6 space-y-6">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <Button variant="ghost" size="sm" onClick={() => navigate(-1)}>
+            <ArrowLeft className="h-4 w-4" />
+            Back
+          </Button>
+          <div>
+            <h1 className="text-3xl font-bold text-foreground">Review & Approval</h1>
+            <p className="text-muted-foreground">
+              Review and approve budget submissions
+            </p>
+          </div>
         </div>
       </div>
 

@@ -6,10 +6,12 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import { Save, Settings as SettingsIcon, Bell, Shield, Palette, Globe } from "lucide-react";
+import { Save, Settings as SettingsIcon, Bell, Shield, Palette, Globe, ArrowLeft } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
 
 export default function Settings() {
+  const navigate = useNavigate();
   const [settings, setSettings] = useState({
     // General Settings
     companyName: "Acme Corporation",
@@ -56,13 +58,19 @@ export default function Settings() {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold text-foreground">Settings</h1>
-          <p className="text-muted-foreground">
-            Configure system preferences and security settings
-          </p>
+    <div className="container mx-auto px-4 py-6 space-y-6">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <Button variant="ghost" size="sm" onClick={() => navigate(-1)}>
+            <ArrowLeft className="h-4 w-4" />
+            Back
+          </Button>
+          <div>
+            <h1 className="text-3xl font-bold text-foreground">Settings</h1>
+            <p className="text-muted-foreground">
+              Configure system preferences and security settings
+            </p>
+          </div>
         </div>
         <Button onClick={handleSaveSettings}>
           <Save className="h-4 w-4 mr-2" />
