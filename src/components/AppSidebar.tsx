@@ -21,6 +21,7 @@ import {
   SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar";
+import sidebarBackground from "@/assets/sidebar-background.png";
 
 const items = [
   { title: "Dashboard", url: "/", icon: LayoutDashboard },
@@ -43,7 +44,16 @@ export function AppSidebar() {
     isActive ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium" : "hover:bg-sidebar-accent/50";
 
   return (
-    <Sidebar className={state === "collapsed" ? "w-14" : "w-60"}>
+    <Sidebar 
+      className={state === "collapsed" ? "w-14" : "w-60"}
+      style={{
+        backgroundImage: `url(${sidebarBackground})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        backgroundBlendMode: 'soft-light'
+      }}
+    >
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>Frugal</SidebarGroupLabel>
