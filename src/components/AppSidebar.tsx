@@ -21,6 +21,7 @@ import {
   SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { Separator } from "@/components/ui/separator";
 import sidebarBackground from "@/assets/sidebar-background.png";
 
 const mainItems = [
@@ -60,19 +61,24 @@ export function AppSidebar() {
           <SidebarGroupLabel className="text-base">Frugal</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu className="space-y-3">
-              {mainItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <NavLink 
-                      to={item.url} 
-                      end 
-                      className={getNavCls({ isActive: isActive(item.url) })}
-                    >
-                      <item.icon className="h-4 w-4" />
-                      {state !== "collapsed" && <span className="text-base">{item.title}</span>}
-                    </NavLink>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
+              {mainItems.map((item, index) => (
+                <div key={item.title}>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild>
+                      <NavLink 
+                        to={item.url} 
+                        end 
+                        className={getNavCls({ isActive: isActive(item.url) })}
+                      >
+                        <item.icon className="h-4 w-4" />
+                        {state !== "collapsed" && <span className="text-base">{item.title}</span>}
+                      </NavLink>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  {item.title === "Departments" && (
+                    <Separator className="my-2" />
+                  )}
+                </div>
               ))}
             </SidebarMenu>
           </SidebarGroupContent>
