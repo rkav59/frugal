@@ -46,7 +46,9 @@ export function AppSidebar() {
 
   return (
     <Sidebar 
-      className={state === "collapsed" ? "w-14" : "w-60 sm:w-60 w-48"}
+      className={`fixed left-0 top-0 h-full z-50 transition-transform duration-300 ${
+        state === "collapsed" ? "w-14 -translate-x-0" : "w-60 sm:w-60 w-48 -translate-x-0"
+      }`}
       style={{
         backgroundImage: `url(${sidebarBackground})`,
         backgroundSize: 'cover',
