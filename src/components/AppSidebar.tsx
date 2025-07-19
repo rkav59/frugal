@@ -58,7 +58,7 @@ export function AppSidebar() {
                       className={getNavCls({ isActive: isActive(item.url) })}
                     >
                       <item.icon className="h-4 w-4" />
-                      {state !== "collapsed" && <span>{item.title}</span>}
+                      {state !== "collapsed" && <span className="text-sm">{item.title}</span>}
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
