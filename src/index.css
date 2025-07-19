@@ -67,11 +67,11 @@ All colors MUST be HSL.
 
     /* Sidebar colors - Dark Cyan */
     --sidebar-background: 190 70% 25%;
-    --sidebar-foreground: 190 15% 85%;
+    --sidebar-foreground: 0 0% 100%;
     --sidebar-primary: 190 80% 60%;
     --sidebar-primary-foreground: 190 10% 15%;
     --sidebar-accent: 190 60% 35%;
-    --sidebar-accent-foreground: 190 15% 90%;
+    --sidebar-accent-foreground: 0 0% 100%;
     --sidebar-border: 190 50% 30%;
     --sidebar-ring: 190 80% 60%;
   }
@@ -112,11 +112,11 @@ All colors MUST be HSL.
     --ring: 212.7 26.8% 83.9%;
     /* Sidebar colors - Dark Cyan (Dark Mode) */
     --sidebar-background: 190 50% 20%;
-    --sidebar-foreground: 190 15% 85%;
+    --sidebar-foreground: 0 0% 100%;
     --sidebar-primary: 190 80% 60%;
     --sidebar-primary-foreground: 190 10% 15%;
     --sidebar-accent: 190 40% 30%;
-    --sidebar-accent-foreground: 190 15% 90%;
+    --sidebar-accent-foreground: 0 0% 100%;
     --sidebar-border: 190 30% 25%;
     --sidebar-ring: 190 80% 60%;
   }
