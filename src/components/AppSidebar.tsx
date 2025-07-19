@@ -56,7 +56,7 @@ export function AppSidebar() {
     >
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Frugal</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-base">Frugal</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
@@ -68,7 +68,7 @@ export function AppSidebar() {
                       className={getNavCls({ isActive: isActive(item.url) })}
                     >
                       <item.icon className="h-4 w-4" />
-                      {state !== "collapsed" && <span className="text-sm">{item.title}</span>}
+                      {state !== "collapsed" && <span className="text-base">{item.title}</span>}
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
