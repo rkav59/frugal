@@ -76,13 +76,35 @@ export default function BudgetInput() {
       if (!formData.department || !formData.cost_center || !formData.budget_type) {
         toast({
           title: "Validation Error",
-          description: "Please fill in all required fields",
+          description: "Please fill in all required fields (Department, Cost Center, and Budget Type)",
           variant: "destructive",
         });
         return;
       }
 
+      if (!formData.period_start || !formData.period_end) {
+        toast({
+          title: "Validation Error", 
+          description: "Please select both start and end dates for the budget period",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      if (formData.period_end <= formData.period_start) {
+        toast({
+          title: "Validation Error",
+          description: "End date must be after start date",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Generate budget ID if not exists
+      const budgetId = currentBudgetId ? currentBudgetId : `BDG-${Date.now()}`;
+
       const budgetData = {
+        budget_id: budgetId,
         department: formData.department,
         cost_center: formData.cost_center,
         budget_type: formData.budget_type as 'OPEX' | 'CAPEX',
@@ -96,15 +118,27 @@ export default function BudgetInput() {
 
       if (currentBudgetId) {
         await updateBudget(currentBudgetId, budgetData);
+        toast({
+          title: "Draft Updated",
+          description: "Your budget draft has been saved successfully",
+        });
       } else {
         const newBudget = await createBudget({
           ...budgetData,
-          budget_id: '', // Will be set by createBudget function
         });
         setCurrentBudgetId(newBudget.id);
+        toast({
+          title: "Draft Saved",
+          description: "Your budget draft has been created and saved",
+        });
       }
     } catch (error) {
       console.error('Error saving draft:', error);
+      toast({
+        title: "Error",
+        description: "Failed to save budget draft. Please try again.",
+        variant: "destructive",
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -114,28 +148,70 @@ export default function BudgetInput() {
     try {
       setIsSubmitting(true);
       
+      // Validate required fields
+      if (!formData.department || !formData.cost_center || !formData.budget_type) {
+        toast({
+          title: "Validation Error",
+          description: "Please complete all required fields before submitting",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      if (!formData.period_start || !formData.period_end) {
+        toast({
+          title: "Validation Error",
+          description: "Please select budget period dates",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      if (lineItems.length === 0 || lineItems.some(item => !item.category || !item.description)) {
+        toast({
+          title: "Validation Error",
+          description: "Please add at least one complete line item with category and description",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      const totalAmount = calculateTotalAmount();
+      if (totalAmount <= 0) {
+        toast({
+          title: "Validation Error",
+          description: "Budget amount must be greater than zero",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Save as draft first if not already saved
       if (!currentBudgetId) {
         await saveDraft();
         if (!currentBudgetId) return;
       }
 
+      // Submit for review
       await submitBudget(currentBudgetId);
       
-      // Reset form
-      setFormData({
-        department: "",
-        cost_center: "",
-        budget_type: "",
-        amount: "",
-        description: "",
-        justification: "",
-        period_start: null,
-        period_end: null,
+      toast({
+        title: "Budget Submitted",
+        description: "Your budget has been submitted for review successfully",
       });
-      setLineItems([{ category: "", description: "", quantity: 1, unit_cost: 0, total_amount: 0 }]);
-      setCurrentBudgetId(null);
+
+      // Navigate back to dashboard after successful submission
+      setTimeout(() => {
+        navigate('/');
+      }, 2000);
+      
     } catch (error) {
       console.error('Error submitting budget:', error);
+      toast({
+        title: "Submission Error",
+        description: "Failed to submit budget for review. Please try again.",
+        variant: "destructive",
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -454,7 +530,7 @@ export default function BudgetInput() {
                   </span>
                 </div>
               </div>
-              <div className="space-y-2 pt-4">
+              <div className="space-y-3 pt-4">
                 <Button
                   onClick={saveDraft}
                   variant="outline"
@@ -462,16 +538,22 @@ export default function BudgetInput() {
                   disabled={isSubmitting}
                 >
                   <Save className="h-4 w-4 mr-2" />
-                  Save Draft
+                  {isSubmitting ? "Saving..." : "Save Draft"}
                 </Button>
                 <Button
                   onClick={submitForReview}
                   className="w-full"
-                  disabled={isSubmitting || !formData.department || !formData.cost_center || !formData.budget_type}
+                  disabled={isSubmitting || (!currentBudgetId && (!formData.department || !formData.cost_center || !formData.budget_type))}
                 >
                   <Send className="h-4 w-4 mr-2" />
-                  Submit for Review
+                  {isSubmitting ? "Submitting..." : "Submit for Review"}
                 </Button>
+                
+                {currentBudgetId && (
+                  <p className="text-xs text-muted-foreground text-center">
+                    Draft saved • Budget ID: {currentBudgetId}
+                  </p>
+                )}
               </div>
             </CardContent>
           </Card>

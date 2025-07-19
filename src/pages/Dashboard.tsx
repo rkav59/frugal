@@ -14,8 +14,10 @@ import {
 } from "lucide-react";
 import { useBudgets } from "@/hooks/useBudgets";
 import { format } from "date-fns";
+import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
+  const navigate = useNavigate();
   const { budgets, departments, loading } = useBudgets();
 
   if (loading) {
@@ -46,11 +48,11 @@ export default function Dashboard() {
           </p>
         </div>
         <div className="flex gap-3">
-          <Button variant="outline">
+          <Button variant="outline" onClick={() => navigate('/reports')}>
             <FileText className="mr-2 h-4 w-4" />
             Export Report
           </Button>
-          <Button>
+          <Button onClick={() => navigate('/budget-input')}>
             <PlusCircle className="mr-2 h-4 w-4" />
             New Budget
           </Button>
@@ -87,6 +89,28 @@ export default function Dashboard() {
           icon={<Users className="h-4 w-4" />}
         />
       </div>
+
+      {/* Quick Actions */}
+      <Card className="border-primary/20 bg-gradient-to-r from-primary/5 to-accent/5">
+        <CardContent className="p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-lg font-semibold mb-2">Ready to create a new budget?</h3>
+              <p className="text-muted-foreground">
+                Submit your department budget request for approval and tracking
+              </p>
+            </div>
+            <Button 
+              size="lg" 
+              onClick={() => navigate('/budget-input')}
+              className="shrink-0"
+            >
+              <PlusCircle className="mr-2 h-5 w-5" />
+              Create Budget Request
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Charts Row */}
       <div className="grid gap-6 md:grid-cols-2">
