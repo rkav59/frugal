@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useBudgets } from "@/hooks/useBudgets";
 import { format } from "date-fns";
+import { useNavigate } from "react-router-dom";
 
 function getStatusBadge(status: string) {
   const variants = {
@@ -37,6 +38,7 @@ function getStatusBadge(status: string) {
 
 export function BudgetTable() {
   const { budgets, loading } = useBudgets();
+  const navigate = useNavigate();
 
   if (loading) {
     return (
@@ -47,6 +49,16 @@ export function BudgetTable() {
   }
 
   const recentBudgets = budgets.slice(0, 10); // Show only recent 10 budgets
+
+  const handleViewDetails = (budgetId: string) => {
+    // Navigate to review page where details can be viewed
+    navigate('/review-approval');
+  };
+
+  const handleEdit = (budgetId: string) => {
+    // Navigate to budget input page with the budget ID for editing
+    navigate(`/budget-input?edit=${budgetId}`);
+  };
 
   return (
     <div className="rounded-md border">
@@ -90,11 +102,11 @@ export function BudgetTable() {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleViewDetails(item.id)}>
                         <Eye className="mr-2 h-4 w-4" />
                         View Details
                       </DropdownMenuItem>
-                      <DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleEdit(item.id)}>
                         <Edit className="mr-2 h-4 w-4" />
                         Edit
                       </DropdownMenuItem>

@@ -93,11 +93,12 @@ export default function UserManagement() {
         toast({ title: "Success", description: "User updated successfully" });
       } else {
         // For new users, you would typically need to create an auth user first
-        // This is a simplified version that updates an existing profile
+        // This is a simplified version for profile-only updates
         toast({ 
           title: "Info", 
-          description: "User creation requires admin privileges through Supabase Auth" 
+          description: "User creation requires admin privileges through Supabase Auth. Please use the Supabase dashboard to create new users." 
         });
+        return;
       }
 
       resetForm();

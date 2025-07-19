@@ -79,7 +79,7 @@ export default function BudgetInput() {
           description: "Please fill in all required fields (Department, Cost Center, and Budget Type)",
           variant: "destructive",
         });
-        return;
+        return null;
       }
 
       if (!formData.period_start || !formData.period_end) {
@@ -88,7 +88,7 @@ export default function BudgetInput() {
           description: "Please select both start and end dates for the budget period",
           variant: "destructive",
         });
-        return;
+        return null;
       }
 
       if (formData.period_end <= formData.period_start) {
@@ -97,7 +97,7 @@ export default function BudgetInput() {
           description: "End date must be after start date",
           variant: "destructive",
         });
-        return;
+        return null;
       }
 
       // Generate budget ID if not exists
@@ -116,22 +116,24 @@ export default function BudgetInput() {
         status: 'Draft' as const,
       };
 
+      let savedBudget;
       if (currentBudgetId) {
-        await updateBudget(currentBudgetId, budgetData);
+        savedBudget = await updateBudget(currentBudgetId, budgetData);
         toast({
           title: "Draft Updated",
           description: "Your budget draft has been saved successfully",
         });
       } else {
-        const newBudget = await createBudget({
+        savedBudget = await createBudget({
           ...budgetData,
         });
-        setCurrentBudgetId(newBudget.id);
+        setCurrentBudgetId(savedBudget.id);
         toast({
           title: "Draft Saved",
           description: "Your budget draft has been created and saved",
         });
       }
+      return savedBudget;
     } catch (error) {
       console.error('Error saving draft:', error);
       toast({
@@ -139,6 +141,7 @@ export default function BudgetInput() {
         description: "Failed to save budget draft. Please try again.",
         variant: "destructive",
       });
+      return null;
     } finally {
       setIsSubmitting(false);
     }
@@ -187,13 +190,17 @@ export default function BudgetInput() {
       }
 
       // Save as draft first if not already saved
-      if (!currentBudgetId) {
-        await saveDraft();
-        if (!currentBudgetId) return;
+      let budgetId = currentBudgetId;
+      if (!budgetId) {
+        const savedBudget = await saveDraft();
+        if (!savedBudget) {
+          throw new Error("Failed to save budget before submission");
+        }
+        budgetId = savedBudget.id;
       }
 
       // Submit for review
-      await submitBudget(currentBudgetId);
+      await submitBudget(budgetId);
       
       toast({
         title: "Budget Submitted",

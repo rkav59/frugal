@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -10,44 +10,122 @@ import { Save, Settings as SettingsIcon, Bell, Shield, Palette, Globe, ArrowLeft
 import { toast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 
+const SETTINGS_STORAGE_KEY = 'frugal-settings';
+
+const defaultSettings = {
+  // General Settings
+  companyName: "Acme Corporation",
+  fiscalYearStart: "01-01",
+  defaultCurrency: "USD",
+  
+  // Notification Settings
+  emailNotifications: true,
+  budgetSubmissionAlerts: true,
+  approvalDeadlineReminders: true,
+  weeklyReports: false,
+  
+  // Security Settings
+  requireTwoFactorAuth: false,
+  sessionTimeout: "60",
+  passwordExpiry: "90",
+  
+  // Budget Settings
+  autoApprovalThreshold: "1000",
+  budgetPeriodLength: "quarterly",
+  allowDraftSaving: true,
+  requireJustification: true,
+  
+  // Display Settings
+  theme: "system",
+  dateFormat: "MM/dd/yyyy",
+  numberFormat: "en-US",
+  timezone: "UTC-5",
+};
+
 export default function Settings() {
   const navigate = useNavigate();
-  const [settings, setSettings] = useState({
-    // General Settings
-    companyName: "Acme Corporation",
-    fiscalYearStart: "01-01",
-    defaultCurrency: "USD",
-    
-    // Notification Settings
-    emailNotifications: true,
-    budgetSubmissionAlerts: true,
-    approvalDeadlineReminders: true,
-    weeklyReports: false,
-    
-    // Security Settings
-    requireTwoFactorAuth: false,
-    sessionTimeout: "60",
-    passwordExpiry: "90",
-    
-    // Budget Settings
-    autoApprovalThreshold: "1000",
-    budgetPeriodLength: "quarterly",
-    allowDraftSaving: true,
-    requireJustification: true,
-    
-    // Display Settings
-    theme: "system",
-    dateFormat: "MM/dd/yyyy",
-    numberFormat: "en-US",
-    timezone: "UTC-5",
-  });
+  const [settings, setSettings] = useState(defaultSettings);
+
+  // Load settings from localStorage on component mount
+  useEffect(() => {
+    const savedSettings = localStorage.getItem(SETTINGS_STORAGE_KEY);
+    if (savedSettings) {
+      try {
+        const parsed = JSON.parse(savedSettings);
+        setSettings({ ...defaultSettings, ...parsed });
+      } catch (error) {
+        console.error('Error parsing saved settings:', error);
+      }
+    }
+  }, []);
 
   const handleSaveSettings = () => {
-    // In a real app, this would save to the database
+    try {
+      localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(settings));
+      toast({
+        title: "Settings Saved",
+        description: "Your preferences have been updated successfully.",
+      });
+    } catch (error) {
+      console.error('Error saving settings:', error);
+      toast({
+        title: "Error",
+        description: "Failed to save settings. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleResetSettings = () => {
+    if (confirm('Are you sure you want to reset all settings to default values?')) {
+      setSettings(defaultSettings);
+      localStorage.removeItem(SETTINGS_STORAGE_KEY);
+      toast({
+        title: "Settings Reset",
+        description: "All settings have been reset to default values.",
+      });
+    }
+  };
+
+  const handleExportSettings = () => {
+    const dataStr = JSON.stringify(settings, null, 2);
+    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(dataBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'frugal-settings.json';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
     toast({
-      title: "Settings Saved",
-      description: "Your preferences have been updated successfully.",
+      title: "Settings Exported",
+      description: "Settings have been downloaded as a JSON file.",
     });
+  };
+
+  const handleImportSettings = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const importedSettings = JSON.parse(e.target?.result as string);
+          setSettings({ ...defaultSettings, ...importedSettings });
+          toast({
+            title: "Settings Imported",
+            description: "Settings have been imported successfully.",
+          });
+        } catch (error) {
+          toast({
+            title: "Import Error",
+            description: "Failed to import settings. Please check the file format.",
+            variant: "destructive",
+          });
+        }
+      };
+      reader.readAsText(file);
+    }
   };
 
   const handleSettingChange = (key: string, value: any) => {
@@ -423,13 +501,22 @@ export default function Settings() {
             <Separator />
 
             <div className="space-y-2">
-              <Button variant="outline" className="w-full">
+              <Button variant="outline" className="w-full" onClick={handleExportSettings}>
                 Export Configuration
               </Button>
-              <Button variant="outline" className="w-full">
-                Import Configuration
-              </Button>
-              <Button variant="destructive" className="w-full">
+              <div>
+                <input
+                  type="file"
+                  accept=".json"
+                  onChange={handleImportSettings}
+                  style={{ display: 'none' }}
+                  id="import-settings"
+                />
+                <Button variant="outline" className="w-full" onClick={() => document.getElementById('import-settings')?.click()}>
+                  Import Configuration
+                </Button>
+              </div>
+              <Button variant="destructive" className="w-full" onClick={handleResetSettings}>
                 Reset to Defaults
               </Button>
             </div>

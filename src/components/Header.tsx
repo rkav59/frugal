@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { useAuth } from "@/contexts/AuthContext";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { useSidebar } from "@/components/ui/sidebar";
+import { useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,13 +13,23 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { toast } from "@/hooks/use-toast";
 
 export function Header() {
   const { user, signOut } = useAuth();
   const { toggleSidebar } = useSidebar();
+  const [searchQuery, setSearchQuery] = useState("");
 
   const handleSignOut = async () => {
     await signOut();
+  };
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      // In a real app, this would trigger search functionality
+      console.log("Searching for:", searchQuery);
+    }
   };
 
   return (
@@ -34,18 +45,30 @@ export function Header() {
             <Menu className="h-4 w-4" />
           </Button>
           <h1 className="text-2xl font-bold text-primary">Frugal</h1>
-          <div className="relative max-w-md">
+          <form onSubmit={handleSearch} className="relative max-w-md">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               placeholder="Search budgets, departments..."
               className="pl-10 w-80"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
-          </div>
+          </form>
         </div>
 
         <div className="flex items-center gap-4">
           <ThemeToggle />
-          <Button variant="ghost" size="icon">
+          <Button 
+            variant="ghost" 
+            size="icon"
+            onClick={() => {
+              // In a real app, this would open a notifications panel
+              toast({
+                title: "Notifications",
+                description: "No new notifications",
+              });
+            }}
+          >
             <Bell className="h-5 w-5" />
           </Button>
 
