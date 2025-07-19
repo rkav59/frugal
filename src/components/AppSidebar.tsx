@@ -46,7 +46,7 @@ export function AppSidebar() {
     <Sidebar className={state === "collapsed" ? "w-14" : "w-60"}>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Navigation</SidebarGroupLabel>
+          <SidebarGroupLabel>Frugal</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
