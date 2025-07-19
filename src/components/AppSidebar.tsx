@@ -23,15 +23,16 @@ import {
 } from "@/components/ui/sidebar";
 import sidebarBackground from "@/assets/sidebar-background.png";
 
-const items = [
+const mainItems = [
   { title: "Dashboard", url: "/", icon: LayoutDashboard },
   { title: "Budget Input", url: "/budget-input", icon: PlusCircle },
   { title: "Review & Approval", url: "/review-approval", icon: CheckSquare },
   { title: "Reports", url: "/reports", icon: BarChart3 },
   { title: "Departments", url: "/departments", icon: Building2 },
   { title: "User Management", url: "/users", icon: Users },
-  { title: "Settings", url: "/settings", icon: Settings },
 ];
+
+const settingsItem = { title: "Settings", url: "/settings", icon: Settings };
 
 export function AppSidebar() {
   const { state } = useSidebar();
@@ -54,12 +55,12 @@ export function AppSidebar() {
         backgroundBlendMode: 'soft-light'
       }}
     >
-      <SidebarContent>
+      <SidebarContent className="flex flex-col h-full">
         <SidebarGroup>
           <SidebarGroupLabel className="text-base">Frugal</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu className="space-y-3">
-              {items.map((item) => (
+              {mainItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <NavLink 
@@ -73,6 +74,27 @@ export function AppSidebar() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+        
+        <div className="flex-1" />
+        
+        <SidebarGroup>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <NavLink 
+                    to={settingsItem.url} 
+                    end 
+                    className={getNavCls({ isActive: isActive(settingsItem.url) })}
+                  >
+                    <settingsItem.icon className="h-4 w-4" />
+                    {state !== "collapsed" && <span className="text-base">{settingsItem.title}</span>}
+                  </NavLink>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
