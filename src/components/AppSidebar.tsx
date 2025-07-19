@@ -58,7 +58,7 @@ export function AppSidebar() {
         <SidebarGroup>
           <SidebarGroupLabel className="text-base">Frugal</SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu>
+            <SidebarMenu className="space-y-3">
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
