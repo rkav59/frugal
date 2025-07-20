@@ -122,7 +122,10 @@ const Auth = () => {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 via-background to-accent/5 p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold text-accent">Frugal</CardTitle>
+          <div className="flex flex-col items-center space-y-4 mb-2">
+            <img src="/logo.png" alt="Frugal Logo" className="w-16 h-16" />
+            <CardTitle className="text-2xl font-bold text-accent">Frugal</CardTitle>
+          </div>
           <CardDescription>
             Your corporate budgeting companion
           </CardDescription>

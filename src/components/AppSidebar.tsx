@@ -51,7 +51,12 @@ export function AppSidebar() {
     >
       <SidebarContent className="flex flex-col h-full">
         <SidebarGroup>
-          
+          <div className="flex items-center p-4 space-x-3">
+            <img src="/logo.png" alt="Frugal Logo" className="w-8 h-8 flex-shrink-0" />
+            {state !== "collapsed" && (
+              <span className="text-lg font-bold text-sidebar-foreground">Frugal</span>
+            )}
+          </div>
           <SidebarGroupContent>
             <SidebarMenu className="space-y-3">
               {mainItems.map((item, index) => (
