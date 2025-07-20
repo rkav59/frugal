@@ -65,14 +65,14 @@ All colors MUST be HSL.
     /* Radius */
     --radius: 0.5rem;
 
-    /* Sidebar colors - Blue sidebar with theme-aware text */
-    --sidebar-background: 217 91% 60%;
-    --sidebar-foreground: 0 0% 100%;
-    --sidebar-primary: 217 91% 60%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 217 91% 70%;
-    --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 217 91% 50%;
+    /* Sidebar colors - Match app theme with black text */
+    --sidebar-background: 210 20% 98%;
+    --sidebar-foreground: 0 0% 0%;
+    --sidebar-primary: 210 20% 98%;
+    --sidebar-primary-foreground: 0 0% 0%;
+    --sidebar-accent: 220 14% 96%;
+    --sidebar-accent-foreground: 0 0% 0%;
+    --sidebar-border: 220 13% 91%;
     --sidebar-ring: var(--ring);
   }
 
@@ -111,13 +111,13 @@ All colors MUST be HSL.
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
     
-    /* Sidebar colors for dark mode - match app theme with black text */
+    /* Sidebar colors for dark mode - match app theme with white text */
     --sidebar-background: 222.2 84% 4.9%;
-    --sidebar-foreground: 0 0% 0%;
+    --sidebar-foreground: 0 0% 100%;
     --sidebar-primary: 222.2 84% 4.9%;
-    --sidebar-primary-foreground: 0 0% 0%;
+    --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 217.2 32.6% 17.5%;
-    --sidebar-accent-foreground: 0 0% 0%;
+    --sidebar-accent-foreground: 0 0% 100%;
     --sidebar-border: 217.2 32.6% 17.5%;
   }
 }
