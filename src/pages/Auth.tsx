@@ -123,7 +123,7 @@ const Auth = () => {
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <div className="flex flex-col items-center space-y-4 mb-2">
-            <img src="/logo.png" alt="Frugal Logo" className="w-16 h-16" />
+            <img src="/src/assets/logo.png" alt="Frugal Logo" className="w-16 h-16" />
             <CardTitle className="text-2xl font-bold text-accent">Frugal</CardTitle>
           </div>
           <CardDescription>

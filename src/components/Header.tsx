@@ -35,7 +35,7 @@ export function Header() {
   return (
     <header className="bg-card border-b border-border px-6 py-4">
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 sm:gap-4">
           <Button 
             variant="ghost" 
             size="icon" 
@@ -44,8 +44,10 @@ export function Header() {
           >
             <Menu className="h-4 w-4" />
           </Button>
-          <h1 className="text-2xl font-bold text-primary">Frugal</h1>
-          <form onSubmit={handleSearch} className="relative max-w-md">
+          <h1 className="text-xl sm:text-2xl font-bold text-primary">Frugal</h1>
+          
+          {/* Desktop search bar */}
+          <form onSubmit={handleSearch} className="relative max-w-md hidden sm:block">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               placeholder="Search budgets, departments..."
@@ -54,6 +56,22 @@ export function Header() {
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </form>
+          
+          {/* Mobile search icon */}
+          <Button 
+            variant="ghost" 
+            size="icon"
+            className="h-9 w-9 sm:hidden"
+            onClick={() => {
+              // In a real app, this would open a search modal
+              toast({
+                title: "Search",
+                description: "Search functionality will be implemented here",
+              });
+            }}
+          >
+            <Search className="h-4 w-4" />
+          </Button>
         </div>
 
         <div className="flex items-center gap-4">
