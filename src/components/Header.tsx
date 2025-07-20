@@ -44,10 +44,10 @@ export function Header() {
           >
             <Menu className="h-4 w-4" />
           </Button>
-          <h1 className="text-xl sm:text-2xl font-bold text-primary">Frugal</h1>
+          <h1 className="text-lg md:text-xl lg:text-2xl font-bold text-primary">Frugal</h1>
           
           {/* Desktop search bar */}
-          <form onSubmit={handleSearch} className="relative max-w-md hidden sm:block">
+          <form onSubmit={handleSearch} className="relative max-w-md hidden lg:block">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               placeholder="Search budgets, departments..."
@@ -57,11 +57,11 @@ export function Header() {
             />
           </form>
           
-          {/* Mobile search icon */}
+          {/* Mobile/Tablet search icon */}
           <Button 
             variant="ghost" 
             size="icon"
-            className="h-9 w-9 sm:hidden"
+            className="h-9 w-9 lg:hidden"
             onClick={() => {
               // In a real app, this would open a search modal
               toast({
@@ -74,7 +74,7 @@ export function Header() {
           </Button>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 md:gap-4">
           <ThemeToggle />
           <Button 
             variant="ghost" 

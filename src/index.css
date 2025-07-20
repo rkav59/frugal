@@ -74,7 +74,16 @@ All colors MUST be HSL.
     --sidebar-accent-foreground: 0 0% 0%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: var(--ring);
-  }
+}
+
+/* Custom styling for SVG logo icons */
+.logo-icon svg {
+  stroke: hsl(var(--foreground));
+}
+
+.dark .logo-icon svg {
+  stroke: #eab308; /* mustard yellow */
+}
 
   .dark {
     --background: 222.2 84% 4.9%;

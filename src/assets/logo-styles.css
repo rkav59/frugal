@@ -1,0 +1,8 @@
+/* Custom styling for SVG logo icons */
+.logo-icon svg {
+  stroke: currentColor;
+}
+
+.dark .logo-icon svg {
+  stroke: #eab308; /* mustard yellow */
+}
