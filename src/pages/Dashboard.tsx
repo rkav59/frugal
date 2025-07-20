@@ -1,6 +1,7 @@
 import { DashboardCard } from "@/components/DashboardCard";
 import { BudgetTable } from "@/components/BudgetTable";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { 
   DollarSign, 
@@ -10,15 +11,31 @@ import {
   PlusCircle,
   FileText,
   Users,
-  AlertTriangle
+  AlertTriangle,
+  Search,
+  Filter,
+  X
 } from "lucide-react";
 import { useBudgets } from "@/hooks/useBudgets";
 import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
+import { useState, useMemo } from "react";
+import { Badge } from "@/components/ui/badge";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { SearchableBudgetTable } from "@/components/SearchableBudgetTable";
 
 export default function Dashboard() {
   const navigate = useNavigate();
   const { budgets, departments, loading } = useBudgets();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
+  const [departmentFilter, setDepartmentFilter] = useState("");
 
   if (loading) {
     return (
@@ -28,14 +45,40 @@ export default function Dashboard() {
     );
   }
 
+  // Filter budgets based on search and filters
+  const filteredBudgets = useMemo(() => {
+    return budgets.filter(budget => {
+      const matchesSearch = searchQuery === "" || 
+        budget.budget_id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        budget.department.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        budget.description?.toLowerCase().includes(searchQuery.toLowerCase());
+      
+      const matchesStatus = statusFilter === "" || budget.status === statusFilter;
+      const matchesDepartment = departmentFilter === "" || budget.department === departmentFilter;
+      
+      return matchesSearch && matchesStatus && matchesDepartment;
+    });
+  }, [budgets, searchQuery, statusFilter, departmentFilter]);
+
   // Calculate real-time statistics
   const stats = {
-    totalBudget: budgets.reduce((sum, b) => sum + b.amount, 0),
-    pendingApproval: budgets.filter(b => ['Submitted', 'Under Review'].includes(b.status)).length,
-    approvedBudgets: budgets.filter(b => b.status === 'Approved').length,
+    totalBudget: filteredBudgets.reduce((sum, b) => sum + b.amount, 0),
+    pendingApproval: filteredBudgets.filter(b => ['Submitted', 'Under Review'].includes(b.status)).length,
+    approvedBudgets: filteredBudgets.filter(b => b.status === 'Approved').length,
     activeDepartments: departments.filter(d => d.is_active).length,
-    approvalRate: budgets.length > 0 ? (budgets.filter(b => b.status === 'Approved').length / budgets.length) * 100 : 0,
+    approvalRate: filteredBudgets.length > 0 ? (filteredBudgets.filter(b => b.status === 'Approved').length / filteredBudgets.length) * 100 : 0,
   };
+
+  const uniqueStatuses = [...new Set(budgets.map(b => b.status))];
+  const uniqueDepartments = [...new Set(budgets.map(b => b.department))];
+
+  const clearFilters = () => {
+    setSearchQuery("");
+    setStatusFilter("");
+    setDepartmentFilter("");
+  };
+
+  const hasActiveFilters = searchQuery || statusFilter || departmentFilter;
 
   return (
     <div className="space-y-6">
@@ -69,6 +112,102 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
+
+      {/* Search and Filters */}
+      <Card className="bg-muted/50">
+        <CardContent className="p-6">
+          <div className="space-y-4">
+            <div className="flex flex-col lg:flex-row gap-4">
+              {/* Search Input */}
+              <div className="relative flex-1">
+                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  placeholder="Search by budget ID, department, or description..."
+                  className="pl-10"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+              </div>
+              
+              {/* Filter Controls */}
+              <div className="flex flex-col sm:flex-row gap-2 lg:w-auto">
+                <Select value={statusFilter} onValueChange={setStatusFilter}>
+                  <SelectTrigger className="w-full sm:w-[180px]">
+                    <SelectValue placeholder="Filter by status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {uniqueStatuses.map((status) => (
+                      <SelectItem key={status} value={status}>
+                        {status}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                
+                <Select value={departmentFilter} onValueChange={setDepartmentFilter}>
+                  <SelectTrigger className="w-full sm:w-[180px]">
+                    <SelectValue placeholder="Filter by department" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {uniqueDepartments.map((dept) => (
+                      <SelectItem key={dept} value={dept}>
+                        {dept}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                
+                {hasActiveFilters && (
+                  <Button 
+                    variant="outline" 
+                    onClick={clearFilters}
+                    className="w-full sm:w-auto"
+                  >
+                    <X className="mr-2 h-4 w-4" />
+                    Clear
+                  </Button>
+                )}
+              </div>
+            </div>
+            
+            {/* Active Filters Display */}
+            {hasActiveFilters && (
+              <div className="flex flex-wrap gap-2">
+                <span className="text-sm text-muted-foreground">Active filters:</span>
+                {searchQuery && (
+                  <Badge variant="secondary" className="gap-1">
+                    Search: {searchQuery}
+                    <button onClick={() => setSearchQuery("")} className="ml-1 hover:bg-muted-foreground/20 rounded-full p-0.5">
+                      <X className="h-3 w-3" />
+                    </button>
+                  </Badge>
+                )}
+                {statusFilter && (
+                  <Badge variant="secondary" className="gap-1">
+                    Status: {statusFilter}
+                    <button onClick={() => setStatusFilter("")} className="ml-1 hover:bg-muted-foreground/20 rounded-full p-0.5">
+                      <X className="h-3 w-3" />
+                    </button>
+                  </Badge>
+                )}
+                {departmentFilter && (
+                  <Badge variant="secondary" className="gap-1">
+                    Department: {departmentFilter}
+                    <button onClick={() => setDepartmentFilter("")} className="ml-1 hover:bg-muted-foreground/20 rounded-full p-0.5">
+                      <X className="h-3 w-3" />
+                    </button>
+                  </Badge>
+                )}
+              </div>
+            )}
+            
+            {/* Results Summary */}
+            <div className="text-sm text-muted-foreground">
+              Showing {filteredBudgets.length} of {budgets.length} budget{budgets.length !== 1 ? 's' : ''}
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Key Metrics */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -162,7 +301,7 @@ export default function Dashboard() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {budgets.slice(0, 3).map((budget, index) => {
+              {filteredBudgets.slice(0, 3).map((budget, index) => {
                 const colors = ['bg-success', 'bg-primary', 'bg-warning'];
                 const statuses = {
                   'Approved': 'approved',
@@ -189,14 +328,7 @@ export default function Dashboard() {
       </div>
 
       {/* Recent Budgets Table */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Recent Budget Submissions</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <BudgetTable />
-        </CardContent>
-      </Card>
+      <SearchableBudgetTable />
     </div>
   );
 }
