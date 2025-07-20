@@ -37,14 +37,6 @@ export default function Dashboard() {
   const [statusFilter, setStatusFilter] = useState("");
   const [departmentFilter, setDepartmentFilter] = useState("");
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-muted-foreground">Loading dashboard...</div>
-      </div>
-    );
-  }
-
   // Filter budgets based on search and filters
   const filteredBudgets = useMemo(() => {
     return budgets.filter(budget => {
@@ -61,16 +53,16 @@ export default function Dashboard() {
   }, [budgets, searchQuery, statusFilter, departmentFilter]);
 
   // Calculate real-time statistics
-  const stats = {
+  const stats = useMemo(() => ({
     totalBudget: filteredBudgets.reduce((sum, b) => sum + b.amount, 0),
     pendingApproval: filteredBudgets.filter(b => ['Submitted', 'Under Review'].includes(b.status)).length,
     approvedBudgets: filteredBudgets.filter(b => b.status === 'Approved').length,
     activeDepartments: departments.filter(d => d.is_active).length,
     approvalRate: filteredBudgets.length > 0 ? (filteredBudgets.filter(b => b.status === 'Approved').length / filteredBudgets.length) * 100 : 0,
-  };
+  }), [filteredBudgets, departments]);
 
-  const uniqueStatuses = [...new Set(budgets.map(b => b.status))];
-  const uniqueDepartments = [...new Set(budgets.map(b => b.department))];
+  const uniqueStatuses = useMemo(() => [...new Set(budgets.map(b => b.status))], [budgets]);
+  const uniqueDepartments = useMemo(() => [...new Set(budgets.map(b => b.department))], [budgets]);
 
   const clearFilters = () => {
     setSearchQuery("");
@@ -79,6 +71,14 @@ export default function Dashboard() {
   };
 
   const hasActiveFilters = searchQuery || statusFilter || departmentFilter;
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-muted-foreground">Loading dashboard...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
